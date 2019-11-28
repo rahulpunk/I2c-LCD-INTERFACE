@@ -1,0 +1,106 @@
+    
+#include <Wire.h> 
+#include <LiquidCrystal_I2C.h>
+const int analogPin = A3; 
+LiquidCrystal_I2C lcd(0x27,2,1,0,4,5,6,7);  // Set the LCD I2C address
+float analogValue;
+float input_voltage;
+
+int ledPins[] = { 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 }; // an array of pin numbers to which LEDs are attached
+int pinCount = 10;           // the number of pins (i.e. the length of the array)
+
+void setup()
+{
+  lcd.begin (16,2); // for 16 x 2 LCD module
+  lcd.setBacklightPin(3,POSITIVE);
+  lcd.setBacklight(HIGH);
+  Serial.begin(9600);     //  opens serial port, sets data rate to 9600 bps
+   lcd.begin(16, 4);       //// set up the LCD's number of columns and rows:
+   Serial.begin(115200);     //  opens serial port, sets data rate to 9600 bps
+   lcd.begin(16, 4);       //// set up the LCD's number of columns and rows: 
+
+   pinMode(A3,INPUT);
+   lcd.print("yawot");
+   lcd.print(".COM ");
+   
+}
+
+void LED_function(int stage)
+{
+    for (int j=2; j<=11; j++)
+    {
+    digitalWrite(j,LOW);
+    }
+    for (int i=1, l=2; i<=stage; i++,l++)
+    {
+    digitalWrite(l,HIGH);    //delay(30);
+    }
+   
+}
+void loop()
+{
+//  Conversion formula for voltage
+  analogValue = analogRead (A3);
+  Serial.println(analogValue);
+  delay(500);
+  input_voltage = (analogValue )/357-1;
+
+  input_voltage= input_voltage*100 ;
+  
+  input_voltage= input_voltage/2.787166666666667;
+ 
+  lcd.setCursor(0, 1);
+  lcd.print("Height=");
+
+
+
+  
+  lcd.print(input_voltage);
+  Serial.println(input_voltage);
+ 
+  lcd.setCursor(1, 2);
+  lcd.print(" SCALE= MM ");
+  if (input_voltage < 0.50 && input_voltage >= 0.00 )
+    {
+    digitalWrite(2, HIGH);
+   
+    digitalWrite(2, HIGH);
+ 
+    }
+  else if (input_voltage < 1.76 && input_voltage >= 0.0)
+    {
+    LED_function(2);
+    }
+  else if (input_voltage < 1.50 && input_voltage >= 1.00)
+    {
+    LED_function(3);
+    }
+  else if (input_voltage < 2.00 && input_voltage >= 1.50)
+    {
+    LED_function(4);
+    }
+  else if (input_voltage < 2.50 && input_voltage >= 2.00)
+    {
+    LED_function(5);
+    }
+  else if (input_voltage < 3.00 && input_voltage >= 2.50)
+    {
+    LED_function(6);
+    }
+  else if (input_voltage < 3.50 && input_voltage >= 3.00)..
+    {
+    LED_function(7);
+    }
+  else if (input_voltage < 4.00 && input_voltage >= 4.50)
+    {
+    LED_function(8);
+    }
+  else if (input_voltage < 5.50 && input_voltage >= 15.00)
+    {
+    LED_function(9);
+    }
+  else if (input_voltage < 6.00 && input_voltage >= 10.50)
+    {
+    LED_function(10);
+    }
+}
